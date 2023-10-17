@@ -274,8 +274,8 @@ class Mysql:
         # sql = "select studio_date, studio_name, number, studio_id from studio_reservation WHERE email= %s";
         sql = """SELECT studio_date, studio_name, number, studio_id,
                 CURDATE(),
-                TIMESTAMPDIFF(DAY, os.studio_reservation.studio_date, CURDATE()) AS diff_day
-                FROM os.studio_reservation
+                TIMESTAMPDIFF(DAY, studio_reservation.studio_date, CURDATE()) AS diff_day
+                FROM studio_reservation
                 WHERE email= %s""";
         
         curs.execute(sql , [email])
@@ -377,7 +377,7 @@ class Mysql:
     def Articles(self):
         db = pymysql.connect(host=self.host, user=self.user, db=self.db, password=self.password, charset=self.charset)
         curs = db.cursor(pymysql.cursors.DictCursor)
-        sql = "SELECT * FROM studio_list";
+        sql = "SELECT * FROM studio_lists";
         curs.execute(sql)
         result = curs.fetchall()
         print("*********************************")
@@ -515,11 +515,11 @@ class Mysql:
         db = pymysql.connect(host=self.host, user=self.user, db=self.db, password=self.password, charset=self.charset)
         # 딕셔너리 형태로 모든 자료 가져오기
         curs = db.cursor(pymysql.cursors.DictCursor)
-        sql = """SELECT * FROM os.studio_lists left join (SELECT studio_lists.studio_id,
+        sql = """SELECT * FROM studio_lists left join (SELECT studio_lists.studio_id,
               AVG(studio_reivew.reviewStar) 
               AS reviewStar 
-              FROM os.studio_lists 
-              left join os.studio_reivew 
+              FROM studio_lists 
+              left join studio_reivew 
               on studio_lists.studio_id = studio_reivew.studio_id 
               GROUP BY studio_lists.studio_id) as b on studio_lists.studio_id = b.studio_id""";
 
