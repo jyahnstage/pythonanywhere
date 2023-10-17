@@ -20,7 +20,7 @@ def check_password(input_password , hashed_password):
 
 
 class Mysql:
-    def __init__(self , host='localhost', user='root', db='os', password='0000', charset='utf8'):
+    def __init__(self , host='jyahn.mysql.pythonanywhere-services.com', user='jyahn', db='jyahn$studio', password='coramdeo', charset='utf8'):
         self.host = host
         self.user = user
         self.db = db
