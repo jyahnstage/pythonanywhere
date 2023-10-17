@@ -1,0 +1,346 @@
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <script>
+            alert("{{messages[-1]}}")
+        </script>
+    {% endif %}
+{% endwith%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reservation</title>
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/indexcss.css">
+  <link rel="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+    integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+    integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css'/>
+  
+  </head>
+  
+  <style>
+    .inner-star::before{color: #FF9600;}
+    .outer-star {position: relative;display: inline-block;color: #CCCCCC;}
+    .inner-star {position: absolute;left: 0;top: 0;width: 0%;overflow: hidden;white-space: nowrap;}
+    .outer-star::before, .inner-star::before {content: '\f005 \f005 \f005 \f005 \f005';font-family: 'Font Awesome 5 free';font-weight: 900;}
+    </style>
+  
+  
+  
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="header_wrap">
+          <h1 class="header_logo"><a href="/"><img src="/static/images/biglogojyahn.png" alt="로고"></a></h1>
+          <nav>
+            <!-- <button class="btn-close" onclick="document.querySelector('nav').style.display='none'">Χ</button> -->
+            <ul class="gnb">
+              <li><a>이용안내</a>
+                <ul class="second-depth">
+                  <li><a href="#">예약안내</a></li>
+                  <li><a href="#">결제안내</a></li>
+                </ul>
+              </li>
+              <li><a href="/sub">검색</a>
+                <ul class="second-depth">
+                  <li><a href="/sub">상세검색</a></li>
+                  <li><a href="/sub">지역검색</a></li>
+                  <li><a href="/sub">유형검색</a></li>
+                </ul>
+              </li>
+              <li><a href="#">이용후기</a></li>
+              <li><a href="/lists">고객센터</a></li>
+            </ul>
+          </nav>
+          <div class="utilmenu">
+            {% if session['is_loged_in'] %}
+            <span class="username">{{session['username']}}님</span>
+            {% else %}
+            <span class="username">guest</span>
+            {% endif %} 
+            {% if session['is_loged_in'] %}
+            <a href="/logout"><img src="/static/images/logout.png" alt="마이메뉴"></a>
+            {% else %}
+            <a href="/loginst"><img src="/static/images/profile.png" alt="마이메뉴"></a>
+            {% endif %}
+            <a href="#" id="toggle_btn"><img src="/static/images/menu.png" alt="메뉴"></a>
+          </div>
+        </div>
+      </header>
+  
+      <div class='whole_wrap'>
+        <main class="container" style="width: 1052px;">
+          <div class="row" style="display: flex;">
+            <section class="col-md-6 col-sm-12 section " style="width: 55%;">
+              <div class="container">
+                <div class="row align-items-stretch retro-layout">
+                  <div class="row" style="margin: 0 auto;">
+                    <div class="hidecard{{ data['studio_id'] }}">
+                      <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner" style="height: 270px;">
+                          <div class="carousel-item active" data-bs-interval="2000">
+                            <img src="{{ data['image'][0] }}" id="img{{ data['studio_id'] }}a" class="d-block w-100" alt="...">
+                          </div>
+                          <div class="carousel-item" data-bs-interval="2000" style="height:300px;">
+                            <img src="{{ data['image'][1] }}" id="img{{ data['studio_id'] }}b" class="d-block w-100" alt="...">
+                          </div>
+                          <div class="carousel-item" data-bs-interval="2000" style="height:300px;">
+                            <img src="{{ data['image'][2] }}" id="img{{ data['studio_id'] }}c" class="d-block w-100" alt="...">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <div style="width: 45%; padding: 100px 20px; ">
+              <div>
+                <h1>{{ data['스튜디오이름'] }}</h1>
+  
+  
+                  <!--별점 표시  -->
+                <div class='RatingStar'>
+                  <div class='RatingScore'>
+                    <div class='outer-star'><div class='inner-star'></div></div>
+                  </div>
+                </div>
+  
+                <!-- 리뷰 점수 표시-->
+                <h6>({{ data3 }})</h6>
+  
+  
+                <!-- <h4>{{ data['유형'] }}</h4> -->
+                <p>{{ data['주소(지역)'] }}</p>
+              </div>
+  
+              <form action="/detail/{{ data['studio_id'] }}" method="POST">
+                <input type="hidden" name="ids" value="{{ data['studio_id'] }}">
+                <input type="hidden" name="name" value="{{ data['스튜디오이름'] }}">
+                <input type="text" id="datepicker" name="reservation" placeholder="예약일자"  min="today()" autocomplete="off" required>
+                <!-- <input type="submit" value="예약하기"> -->
+
+
+
+                    {% block body %}
+
+                        <!--<a href="/loginst" class="on"><button type="submit">예약하기</button></a>-->
+
+                        {% if session['is_loged_in'] %}
+
+                            {% if session['phone'] == 'kakao' %}
+
+                                <!--<a href="#" class="on"><button type="submit">Okay</button></a>-->
+                                <a href="/change_email" class="on">예약하기</a>
+
+                            {% else%}
+
+                                <a href="#" class="on"><button type="submit">예약하기</button></a>
+                                <!--<a href="/change_email" class="on">email 변경</a>-->
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <a href="/loginst" class="on"><button type="submit">예약하기</button></a>
+
+                        {% endif %}
+
+                    {% endblock %}
+            </form>
+          </div>
+        </div>
+        <p>[후기]</p>
+        {% for key, value in data4.items() %}
+          <p>{{ key }}, ( {{ value }} )</p>
+        {% endfor %}  
+        <div class="reservation">
+          <h3>예약시 주의사항</h3>
+          <ul>
+            <li>1. 촬영 준비 및 세팅, 장비 철수 및 장소 원상복구 시간은 계약 시간에 포함 되어있습니다.</li>
+            <li>(시간 초과 시 30분 기준 추가 요금이 부가됩니다.)</li>
+            <li>2. 이동형 가벽은 '꼭' 두 명 이상이 옮겨야 안전 합니다.</li>
+            <li>3. 기동형 가벽 사용 시 천장형 에어컨을 피해서 옮겨 주세요.</li>
+            <li>4. 커텐 사용시 가급적 사다리를 이용해 주세요.</li>
+            <li>5. 촬영 후 사용하신 장비 등은 제자리에 놓아 주세요.</li>
+            <li>6. 촬영 하시면서 발생한 쓰레기를 다음 분을 위해 정리정돈 해주세요.</li>
+            <li>7. 공간에서의 취식은 금지 되어 있습니다.</li>
+          </ul>
+        </div>
+        <div class="refund">
+          <h3>환불규정 안내</h3>
+          <p style="padding-bottom: 20px;">
+            <em style="color: rgb(255, 58, 72);">이용당일(첫 날) 이후에 환불 관련 사항은 호스트에게
+              직접 문의하셔야 합니다.</em>
+            결제 후 2시간 이내에는 100% 환불이 가능합니다.(단, 이용시간 전까지만 가능)
+          </p>
+          <ul>
+            <li><strong style="color: rgb(101, 101, 101);">
+                이용 8일 전
+              </strong> <span data-v-73604231="" class="data" style="color: rgb(0, 0, 0);">총 금액의 100% 환불</span> <!----></li>
+            <li><strong style="color: rgb(101, 101, 101);">
+                이용 7일 전
+              </strong> <span style="color: rgb(0, 0, 0);">총 금액의 90% 환불</span> <!----></li>
+            <li><strong style="color: rgb(101, 101, 101);">
+                이용 6일 전
+              </strong> <span style="color: rgb(0, 0, 0);">총 금액의 80% 환불</span> <!----></li>
+            <li><strong style="color: rgb(101, 101, 101);">
+                이용 5일 전
+              </strong> <!----> <span style="color: rgb(0, 0, 0);">환불 불가</span></li>
+            <li><strong style="color: rgb(101, 101, 101);">
+                이용 4일 전
+              </strong> <!----> <span style="color: rgb(0, 0, 0);">환불 불가</span></li>
+            <li><strong style="color: rgb(101, 101, 101);">
+                이용 3일 전
+              </strong> <!----> <span style="color: rgb(0, 0, 0);">환불 불가</span></li>
+            <li><strong style="color: rgb(101, 101, 101);">
+                이용 2일 전
+              </strong> <!----> <span style="color: rgb(0, 0, 0);">환불 불가</span></li>
+            <li><strong style="color: rgb(101, 101, 101);">
+                이용 전날
+              </strong> <!----> <span style="color: rgb(0, 0, 0);">환불 불가</span></li>
+            <li><strong style="color: rgb(101, 101, 101);">
+                이용 당일
+              </strong> <!----> <span style="color: rgb(0, 0, 0);">환불 불가</span></li>
+          </ul>
+        </div>
+        <div style="margin-bottom: 50px;">
+          <iframe src="{{ data['지도'] }}" width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </main>
+    </div>
+
+    <footer>
+      <div class="footerwrap">
+        <div class="footer_logo"><img src="/static/images/biglogojyahn.png" alt="로고"></div>
+        <div class="footer_text">
+          <span>서울시 노원구 동일로 1351 2층(상계동) / 대표자: 안지영 / 사업자번호:210-91-08887</span>
+          <span>Tel:02-952-1163 / Fax:02-952-7116 / 대표 E-mail:webmaster@studiopd.co.kr</span>
+          <span>Copyright ⓒ studiopd.corp.All Rights Reserved.</span>
+        </div>
+        <div class="circle">
+          <img src="/static/images/twitter.png" alt="트위터">
+          <img src="/static/images/instagram.png" alt="인스타">
+          <img src="/static/images/facebook.png" alt="페이스북">
+        </div>
+      </div>
+    </footer>
+
+<script>
+
+  var studio_data = {{ data2 | safe }};
+
+
+    jQuery(function($){
+
+          /*
+          //config 값을 json형식으로 만든후 setDefaults로 설정할수도 있음.
+
+          $.datepicker.regional['ko'] = {closeText: '닫기',dayNamesShort: ['일','월','화','수','목','금','토']};
+          $.datepicker.setDefaults($.datepicker.regional['ko']);
+          */
+
+          $("#datepicker").datepicker({
+              // changeMonth:true,
+              // changeYear:true,
+              yearRange:"2023:2024",
+              showOn:"both",
+              buttonImage:"/static/images/calendar.png",
+              buttonImageOnly:true,
+              dateFormat: 'yy-mm-dd',
+              showOtherMonths: true,
+              selectOtherMonths: true,
+              showMonthAfterYear: true,
+              minDate: 0,
+              dayNamesMin: ['일','월', '화', '수', '목', '금', '토'],
+              monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+              monthNames: ['년 1월','년 2월','년 3월','년 4월','년 5월','년 6월','년 7월','년 8월','년 9월','년 10월','년 11월','년 12월'],
+              nextText: '다음 달',
+              prevText: '이전 달',
+              beforeShowDay: disableAllTheseDays
+          });
+
+      });
+
+      // 특정날짜들 배열
+      var disabledDays = studio_data;
+
+      // 주말(토, 일요일) 선택 막기
+      function noWeekendsOrHolidays(date) {
+          var noWeekend = jQuery.datepicker.noWeekends(date);
+          return noWeekend[0] ? [true] : noWeekend;
+      }
+
+      // 일요일만 선택 막기
+      function noSundays(date) {
+        return [date.getDay() != 0, ''];
+      }
+
+      // 이전 날짜들은 선택막기
+      function noBefore(date){
+          if (date < new Date()){
+              return [false];}
+          return [true];
+      }
+
+      // 특정일 선택막기
+      function disableAllTheseDays(date) {
+        var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+        console.log(m);
+        for (i = 0; i < disabledDays.length; i++) {
+            if($.inArray(y + '-' +(m+1) + '-' + d,disabledDays) != -1) {
+                return [false];
+            }
+        }
+        return [true];
+    }
+</script>
+</body>
+
+<script>/*<![CDATA[*/ 
+
+  var star =  {{ data3 | safe }};
+  
+  ratings = {RatingScore: star}
+  console.log(ratings)
+  totalRating = 5;
+  table = document.querySelector('.RatingStar');
+  function rateIt() {
+    for (rating in ratings) {
+      ratingPercentage = ratings[rating] / totalRating * 100;
+      ratingRounded = Math.round(ratingPercentage / 10) * 10 + '%';
+      star = table.querySelector(`.${rating} .inner-star`);
+      // numberRating = table.querySelector(`.${rating} .numberRating`);
+      star.style.width = ratingRounded;
+      // numberRating.innerText = ratings[rating];
+    }
+  }
+  rateIt()
+  /*]]>*/
+</script>
+
+
+</html>
